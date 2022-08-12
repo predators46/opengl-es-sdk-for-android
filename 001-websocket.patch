@@ -12,7 +12,7 @@ Subject: [PATCH] chore: websocket dependencies
  5 files changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/go.mod b/go.mod
-index 8d1c2ea2fb..934a4bee16 100644
+index 261a8f5..319c621 100644
 --- a/go.mod
 +++ b/go.mod
 @@ -3,11 +3,11 @@ module github.com/xtls/xray-core
@@ -25,7 +25,7 @@ index 8d1c2ea2fb..934a4bee16 100644
  	github.com/golang/protobuf v1.5.2
  	github.com/google/go-cmp v0.5.8
 -	github.com/gorilla/websocket v1.5.0
- 	github.com/lucas-clemente/quic-go v0.28.1
+ 	github.com/lucas-clemente/quic-go v0.28.0
  	github.com/marten-seemann/qtls-go1-16 v0.1.5
  	github.com/marten-seemann/qtls-go1-17 v0.1.2
 diff --git a/go.sum b/go.sum
