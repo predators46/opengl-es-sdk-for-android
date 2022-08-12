@@ -1,0 +1,94 @@
+From 5ea30cf9e915292b0056092a71bedc64f64585bd Mon Sep 17 00:00:00 2001
+From: djoeni <djoeni666@gmail.com>
+Date: Fri, 5 Aug 2022 01:17:27 +0700
+Subject: [PATCH] chore: websocket dependencies
+
+---
+ go.mod                                     | 2 +-
+ go.sum                                     | 4 ++--
+ transport/internet/websocket/connection.go | 3 ++-
+ transport/internet/websocket/dialer.go     | 3 ++-
+ transport/internet/websocket/hub.go        | 3 ++-
+ 5 files changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/go.mod b/go.mod
+index 8d1c2ea2fb..934a4bee16 100644
+--- a/go.mod
++++ b/go.mod
+@@ -3,11 +3,11 @@ module github.com/xtls/xray-core
+ go 1.18
+ 
+ require (
++	github.com/djoeni/websocket v0.6.9
+ 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32
+ 	github.com/golang/mock v1.6.0
+ 	github.com/golang/protobuf v1.5.2
+ 	github.com/google/go-cmp v0.5.8
+-	github.com/gorilla/websocket v1.5.0
+ 	github.com/lucas-clemente/quic-go v0.28.1
+ 	github.com/marten-seemann/qtls-go1-16 v0.1.5
+ 	github.com/marten-seemann/qtls-go1-17 v0.1.2
+diff --git a/go.sum b/go.sum
+index eb739efaff..8e2adaf670 100644
+--- a/go.sum
++++ b/go.sum
+@@ -36,6 +36,8 @@ github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSs
+ github.com/dgryski/go-metro v0.0.0-20200812162917-85c65e2d0165/go.mod h1:c9O8+fpSOX1DM8cPNSkX/qsBWdkD4yd2dpciOWQjpBw=
+ github.com/dgryski/go-metro v0.0.0-20211217172704-adc40b04c140 h1:y7y0Oa6UawqTFPCDw9JG6pdKt4F9pAhHv0B7FMGaGD0=
+ github.com/dgryski/go-metro v0.0.0-20211217172704-adc40b04c140/go.mod h1:c9O8+fpSOX1DM8cPNSkX/qsBWdkD4yd2dpciOWQjpBw=
++github.com/djoeni/websocket v0.6.9 h1:XiUTLarr3rkM4VJxaBgviVAPcUHjOsJGJuMT0zwnXnw=
++github.com/djoeni/websocket v0.6.9/go.mod h1:GXiVgVGMOQ4iQZokBoCO1hm/vYiaN05U3avSq9cqK0U=
+ github.com/dustin/go-humanize v1.0.0/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25KnS6fMYU6eOk=
+ github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
+ github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
+@@ -99,8 +101,6 @@ github.com/google/uuid v1.1.2/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+
+ github.com/googleapis/gax-go v2.0.0+incompatible/go.mod h1:SFVmujtThgffbyetf+mdk2eWhX2bMyUtNHzFKcPA9HY=
+ github.com/googleapis/gax-go/v2 v2.0.3/go.mod h1:LLvjysVCY1JZeum8Z6l8qUty8fiNwE08qbEPm1M08qg=
+ github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
+-github.com/gorilla/websocket v1.5.0 h1:PPwGk2jz7EePpoHN/+ClbZu8SPxiqlu12wZP/3sWmnc=
+-github.com/gorilla/websocket v1.5.0/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
+ github.com/gregjones/httpcache v0.0.0-20180305231024-9cad4c3443a7/go.mod h1:FecbI9+v66THATjSRHfNgh1IVFe/9kFxbXtjV0ctIMA=
+ github.com/grpc-ecosystem/grpc-gateway v1.5.0/go.mod h1:RSKVYQBd5MCa4OVpNdGskqpgL2+G+NZTnrVHpWWfpdw=
+ github.com/grpc-ecosystem/grpc-gateway v1.16.0/go.mod h1:BDjrQk3hbvj6Nolgz8mAMFbcEtjT1g+wF4CSlocrBnw=
+diff --git a/transport/internet/websocket/connection.go b/transport/internet/websocket/connection.go
+index ca53b619a2..7559378e2d 100644
+--- a/transport/internet/websocket/connection.go
++++ b/transport/internet/websocket/connection.go
+@@ -5,7 +5,8 @@ import (
+ 	"net"
+ 	"time"
+ 
+-	"github.com/gorilla/websocket"
++	"github.com/djoeni/websocket"
++
+ 	"github.com/xtls/xray-core/common/buf"
+ 	"github.com/xtls/xray-core/common/errors"
+ 	"github.com/xtls/xray-core/common/serial"
+diff --git a/transport/internet/websocket/dialer.go b/transport/internet/websocket/dialer.go
+index 284d8deed8..522d403599 100644
+--- a/transport/internet/websocket/dialer.go
++++ b/transport/internet/websocket/dialer.go
+@@ -10,7 +10,8 @@ import (
+ 	"os"
+ 	"time"
+ 
+-	"github.com/gorilla/websocket"
++	"github.com/djoeni/websocket"
++
+ 	"github.com/xtls/xray-core/common"
+ 	"github.com/xtls/xray-core/common/net"
+ 	"github.com/xtls/xray-core/common/session"
+diff --git a/transport/internet/websocket/hub.go b/transport/internet/websocket/hub.go
+index c0cf34467e..50c42a5179 100644
+--- a/transport/internet/websocket/hub.go
++++ b/transport/internet/websocket/hub.go
+@@ -11,7 +11,8 @@ import (
+ 	"sync"
+ 	"time"
+ 
+-	"github.com/gorilla/websocket"
++	"github.com/djoeni/websocket"
++
+ 	"github.com/xtls/xray-core/common"
+ 	"github.com/xtls/xray-core/common/net"
+ 	http_proto "github.com/xtls/xray-core/common/protocol/http"
