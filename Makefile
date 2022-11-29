@@ -8,17 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mariadb
-PKG_VERSION:=10.1.45
+PKG_VERSION:=10.0.38
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL := \
-	https://mirror.netcologne.de/mariadb/$(PKG_NAME)-$(PKG_VERSION)/source \
-	https://mirror.lstn.net/mariadb/$(PKG_NAME)-$(PKG_VERSION)/source \
-	https://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/$(PKG_NAME)-$(PKG_VERSION)/source \
-	https://downloads.mariadb.org/interstitial/$(PKG_NAME)-$(PKG_VERSION)/source
+PKG_SOURCE_URL :=https://archive.mariadb.org/mariadb-10.0.38/source/
 
-PKG_HASH:=9d8f0f71f9613b2028ffc5c5be8b98948ec955eb0d89600d18ed7cc04807dad5
+PKG_HASH:=022620ebeb4fb3744d101e72443ec55b4585e7d9a3d8c92aa846bc30e6808ac1
 PKG_MAINTAINER:=Sebastian Kemper <sebastian_ml@gmx.net>
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=COPYING
@@ -46,16 +42,10 @@ MARIADB_COMMON_DEPENDS := \
 MARIADB_SERVER_PLUGINS := \
 	adt_null \
 	auth_0x0100 \
-	auth_ed25519 \
 	auth_socket \
 	auth_test_plugin \
-	client_ed25519 \
-	debug_key_management \
 	dialog_examples \
-	disks \
-	example_key_management \
 	feedback \
-	file_key_management \
 	ha_archive \
 	ha_blackhole \
 	ha_connect \
@@ -80,9 +70,7 @@ MARIADB_SERVER_PLUGINS := \
 	semisync_master \
 	semisync_slave \
 	server_audit \
-	simple_password_check \
-	sql_errlog \
-	wsrep_info
+	sql_errlog
 
 PKG_CONFIG_DEPENDS := \
 	$(patsubst %,CONFIG_PACKAGE_$(PKG_NAME)-server-plugin-%,$(subst _,-,$(MARIADB_SERVER_PLUGINS))) \
@@ -90,16 +78,10 @@ PKG_CONFIG_DEPENDS := \
 
 plugin-adt_null                 := PLUGIN_AUDIT_NULL
 plugin-auth_0x0100              := PLUGIN_AUTH_0X0100
-plugin-auth_ed25519             := PLUGIN_AUTH_ED25519
 plugin-auth_socket              := PLUGIN_AUTH_SOCKET
 plugin-auth_test_plugin         := PLUGIN_AUTH_TEST_PLUGIN
-plugin-client_ed25519           := PLUGIN_CLIENT_ED25519
-plugin-debug_key_management     := PLUGIN_DEBUG_KEY_MANAGEMENT
 plugin-dialog_examples          := PLUGIN_DIALOG_EXAMPLES
-plugin-disks                    := PLUGIN_DISKS
-plugin-example_key_management   := PLUGIN_EXAMPLE_KEY_MANAGEMENT
 plugin-feedback                 := PLUGIN_FEEDBACK
-plugin-file_key_management      := PLUGIN_FILE_KEY_MANAGEMENT
 plugin-ha_archive               := PLUGIN_ARCHIVE
 plugin-ha_blackhole             := PLUGIN_BLACKHOLE
 plugin-ha_connect               := PLUGIN_CONNECT
@@ -124,9 +106,7 @@ plugin-query_response_time      := PLUGIN_QUERY_RESPONSE_TIME
 plugin-semisync_master          := PLUGIN_SEMISYNC_MASTER
 plugin-semisync_slave           := PLUGIN_SEMISYNC_SLAVE
 plugin-server_audit             := PLUGIN_SERVER_AUDIT
-plugin-simple_password_check    := PLUGIN_SIMPLE_PASSWORD_CHECK
 plugin-sql_errlog               := PLUGIN_SQL_ERRLOG
-plugin-wsrep_info               := PLUGIN_WSREP_INFO
 
 MARIADB_CLIENT := \
 	mysql \
@@ -353,7 +333,7 @@ CMAKE_OPTIONS += \
 	-DINSTALL_SUPPORTFILESDIR=share/mysql \
 	-DINSTALL_UNIX_ADDRDIR=/var/run/mysqld/mysqld.sock \
 	-DMYSQLD_USER=mariadb \
-	-DMYSQL_DATADIR=/var/lib/mysql \
+	-DMYSQL_DATADIR=/srv/mysql \
 	-DMYSQL_UNIX_ADDR=/var/run/mysqld/mysqld.sock \
 	-DSKIP_TESTS=ON \
 	-DWITH_ASAN=OFF \
@@ -372,7 +352,6 @@ CMAKE_OPTIONS += \
 	-DWITH_PCRE=system \
 	-DWITH_READLINE=OFF \
 	-DWITH_SAFEMALLOC=OFF \
-	-DWITH_SSL=system \
 	-DWITH_SYSTEMD=no \
 	-DWITH_VALGRIND=OFF \
 	-DWITH_ZLIB=system
@@ -438,7 +417,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/mysql $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmysqlclient*.so* $(1)/usr/lib
 	cd $(1)/usr/lib/mysql; $(LN) ../libmysqlclient*.so* .
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/pkgconfig/mariadb.pc $(1)/usr/lib/pkgconfig
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/aclocal/mysql.m4 $(1)/usr/share/aclocal
 endef
 
@@ -482,7 +460,6 @@ define Package/mariadb-server/install
 	$(INSTALL_DIR) $(1)/usr/share/mysql/english
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/mysql/english/errmsg.sys $(1)/usr/share/mysql/english
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/mysql/fill_help_tables.sql $(1)/usr/share/mysql
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/mysql/maria_add_gis_sp_bootstrap.sql $(1)/usr/share/mysql
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/mysql/mysql_performance_tables.sql $(1)/usr/share/mysql
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/mysql/mysql_system_tables.sql $(1)/usr/share/mysql
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/mysql/mysql_system_tables_data.sql $(1)/usr/share/mysql
@@ -530,16 +507,10 @@ $(eval $(call BuildPackage,mariadb-server-extra))
 
 $(eval $(call BuildPlugin,adt_null,))
 $(eval $(call BuildPlugin,auth_0x0100,))
-$(eval $(call BuildPlugin,auth_ed25519,))
 $(eval $(call BuildPlugin,auth_socket,))
 $(eval $(call BuildPlugin,auth_test_plugin,))
-$(eval $(call BuildPlugin,client_ed25519,))
-$(eval $(call BuildPlugin,debug_key_management,))
 $(eval $(call BuildPlugin,dialog_examples,))
-$(eval $(call BuildPlugin,disks,))
-$(eval $(call BuildPlugin,example_key_management,))
 $(eval $(call BuildPlugin,feedback,))
-$(eval $(call BuildPlugin,file_key_management,))
 $(eval $(call BuildPlugin,ha_archive,))
 $(eval $(call BuildPlugin,ha_blackhole,))
 $(eval $(call BuildPlugin,ha_connect,+libxml2))
@@ -564,6 +535,4 @@ $(eval $(call BuildPlugin,query_response_time,))
 $(eval $(call BuildPlugin,semisync_master,))
 $(eval $(call BuildPlugin,semisync_slave,))
 $(eval $(call BuildPlugin,server_audit,))
-$(eval $(call BuildPlugin,simple_password_check,))
 $(eval $(call BuildPlugin,sql_errlog,))
-$(eval $(call BuildPlugin,wsrep_info,))
