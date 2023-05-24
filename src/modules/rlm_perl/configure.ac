@@ -13,10 +13,10 @@ if test x$with_[]modname != xno; then
 	dnl set $fail to what's missing, on fatal errors.
 	dnl use AC_MSG_WARN() on important messages.
 
-	AX_WITH_PROG([PERL],[perl],[not-found],[${PATH}:/usr/bin:/usr/local/bin])
-	if test "$PERL" = "not-found" -o ! -x "$PERL"; then
-		fail=$fail" perl"
-	else
+	dnl AX_WITH_PROG([PERL],[perl],[not-found],[${PATH}:/usr/bin:/usr/local/bin])
+	dnl if test "$PERL" = "not-found" -o ! -x "$PERL"; then
+		dnl fail=$fail" perl"
+	dnl else
 		old_CFLAGS="${CFLAGS}"
 		old_LIBS="${LIBS}"
 		
@@ -24,7 +24,7 @@ if test x$with_[]modname != xno; then
 		dnl # Call ExtUtils::Embed to get compiler flags
 		dnl ############################################################
 		AC_MSG_NOTICE([Calling ExtUtils::Embed to get 'ccopts'])
-		mod_cflags=$($PERL -MExtUtils::Embed -e ccopts)
+		dnl mod_cflags=$($PERL -MExtUtils::Embed -e ccopts)
 		
 		AC_MSG_NOTICE([ExtUtil's ccopts were \"${mod_cflags}\"])
 		
@@ -38,9 +38,9 @@ if test x$with_[]modname != xno; then
 		dnl #  Call ExtUtils::Embed to get linker flags
 		dnl ############################################################
 		AC_MSG_NOTICE([Calling ExtUtils::Embed to get 'ldflags'])
-		mod_ldflags=$($PERL -MExtUtils::Embed -e ldopts)
+		dnl mod_ldflags=$($PERL -MExtUtils::Embed -e ldopts)
 		
-		AC_MSG_NOTICE([ExtUtil's ldopts were \"${mod_ldflags}\"])
+		dnl AC_MSG_NOTICE([ExtUtil's ldopts were \"${mod_ldflags}\"])
 		
 		mod_ldflags=[$(echo "$mod_ldflags" | sed 's/-arch [^ ]*//g;s/  / /g;s/^ *//;s/ *$//')]
 		
