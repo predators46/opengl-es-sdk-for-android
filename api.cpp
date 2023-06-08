@@ -615,9 +615,9 @@ static int websocket_handshake(SOCKETTYPE c, char *result, char *clientkey)
 	// SHA-1 test from rfc, returns in base64 "s3pPLMBiTxaQ9kYGzzhZRbK+xOo="
 	//sprintf(inpkey, "dGhlIHNhbXBsZSBub25jZQ==258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
 
-	SHA1_Init(&ctx);
-	SHA1_Update(&ctx, inpkey, strlen(inpkey));
-	SHA1_Final(sha1, &ctx);
+	SHA1_Init(SHA_CTX *c);
+	SHA1_Update(SHA_CTX *c, const void *data, size_t len);
+	SHA1_Final(unsigned char *md, SHA_CTX *c);
 
 	base64_encode(sha1, 20, seckey, sizeof(seckey));
 
